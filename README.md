@@ -41,18 +41,18 @@ Before you begin, ensure you have met the following requirements:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/poseidon-cluster-guide.git
+    git clone https://github.com/anthony-meza/WHOI-PO-HPC.git
     ```
 2. Navigate to the project directory:
     ```bash
-    cd poseidon-cluster-guide
+    cd WHOI-PO-HPC
     ```
 3. Install the required Python packages:
    Using ```pip```
     ```bash
     pip install -r requirements.txt
     ```
-    or ```conda```
+    or ```conda``` (preferred method) 
     ```bash
     conda env create -f environment.yml
     ```
