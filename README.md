@@ -48,10 +48,11 @@ Before you begin, ensure you have met the following requirements:
     cd poseidon-cluster-guide
     ```
 3. Install the required Python packages:
+   Using ```pip```
     ```bash
     pip install -r requirements.txt
     ```
-
+    or ```conda```
     ```bash
     conda env create -f environment.yml
     ```
