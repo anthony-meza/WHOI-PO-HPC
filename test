@@ -1,0 +1,148 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Basic Tutorial: Using Dask and xarray on Poseidon\n",
+    "\n",
+    "This notebook provides a basic introduction to using Dask and xarray for parallel computing and handling multi-dimensional arrays."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Prerequisites\n",
+    "\n",
+    "Ensure you have activated the Conda environment:\n",
+    "```bash\n",
+    "conda activate poseidon-cluster-env\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Importing Libraries"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "metadata": {},
+   "source": [
+    "import dask.array as da\n",
+    "import xarray as xr\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt"
+   ],
+   "execution_count": 1,
+   "outputs": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Loading a NetCDF File with xarray\n",
+    "\n",
+    "Let's load a sample NetCDF file using xarray. For this example, we'll use a sample dataset from xarray."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "metadata": {},
+   "source": [
+    "# Load a sample NetCDF file\n",
+    "ds = xr.tutorial.open_dataset('rasm')\n",
+    "ds"
+   ],
+   "execution_count": 2,
+   "outputs": [
+    {
+     "output_type": "execute_result",
+     "data": {
+      "text/plain": [
+       "<xarray.Dataset>\n",
+       "Dimensions:  (time: 36, y: 205, x: 275)\n",
+       "Coordinates:\n",
+       "  * time     (time) datetime64[ns] 1980-09-01 1980-10-01 ... 1983-08-01\n",
+       "  * y        (y) int64 0 1 2 3 4 5 6 7 8 9 ... 196 197 198 199 200 201 202 203 204\n",
+       "  * x        (x) int64 0 1 2 3 4 5 6 7 8 9 ... 265 266 267 268 269 270 271 272 273 274\n",
+       "Data variables:\n",
+       "    Tair     (time, y, x) float64 dask.array<chunksize=(36, 205, 275), meta=np.ndarray>\n",
+       "Attributes:\n",
+       "    title:                     /workspace/jhamman/RASM/datasets/atm/mo..."
+      ]
+     },
+     "metadata": {},
+     "execution_count": 2
+    }
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exploring the Dataset\n",
+    "\n",
+    "We can explore the contents of the dataset to understand its structure and variables."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "metadata": {},
+   "source": [
+    "# Print dataset information\n",
+    "print(ds)"
+   ],
+   "execution_count": 3,
+   "outputs": [
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": [
+      "<xarray.Dataset>\n",
+      "Dimensions:  (time: 36, y: 205, x: 275)\n",
+      "Coordinates:\n",
+      "  * time     (time) datetime64[ns] 1980-09-01 1980-10-01 ... 1983-08-01\n",
+      "  * y        (y) int64 0 1 2 3 4 5 6 7 8 9 ... 196 197 198 199 200 201 202 203 204\n",
+      "  * x        (x) int64 0 1 2 3 4 5 6 7 8 9 ... 265 266 267 268 269 270 271 272 273 274\n",
+      "Data variables:\n",
+      "    Tair     (time, y, x) float64 dask.array<chunksize=(36, 205, 275), meta=np.ndarray>\n",
+      "Attributes:\n",
+      "    title:                     /workspace/jhamman/RASM/datasets/atm/mo...\n"
+     ]
+    }
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visualizing the Data\n",
+    "\n",
+    "Let's plot the air temperature (Tair) for the first time step."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "metadata": {},
+   "source": [
+    "# Select the first time step\n",
+    "tair = ds.Tair.isel(time=0)\n",
+    "\n",
+    "# Plot the data\n",
+    "tair.plot(cmap='viridis')\n",
+    "plt.title('Air Temperature at First Time Step')\n",
+    "plt.show()"
+   ],
+   "execution_count": 4,
+   "outputs": [
+    {
+     "output_type": "execute_result",
+     "data": {
+      "text/plain": [
+       "<matplotlib.collections.QuadMesh at 0x7f9b485f1250>"
+      ],
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgCAYAAABCLpTGAAAABHNCSVQICAgIfAhkiAAAIABJREFUeJzs3QeYZdUVwPH/3fPsuUkkVVklbKx7bbBK1UrQtYx6ci2MF3RrRFdixnWxIh3BUtWJlG7VZCzRZjG8YNA7KmlUK0HaHF3QQWaK2sYxYAhESJxBUnSlJukdN+5tyXfdrZ35vrP+e9nxIY2JwYkySeXPOf8757v9zzzkzLwH8LD/zA3qBapAUEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIUFEgkKBoEklIU
