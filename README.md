@@ -52,6 +52,10 @@ Before you begin, ensure you have met the following requirements:
     pip install -r requirements.txt
     ```
 
+    ```bash
+    conda env create -f environment.yml
+    ```
+
 ## Using Dask
 
 [Dask](https://dask.org/) is a flexible parallel computing library for analytics. It helps scale the Python ecosystem (numpy, pandas, scikit-learn, etc.) and enables execution on multi-core machines and distributed clusters.
