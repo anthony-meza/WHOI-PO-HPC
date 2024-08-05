@@ -34,7 +34,7 @@ This repository contains comprehensive information on utilizing parallel and dis
 
 Before you begin, ensure you have met the following requirements:
 - You have a WHOI Poseidon cluster account.
-- You have Python installed on your local machine.
+- You have Python and Conda installed on your local machine.
 - You have basic knowledge of parallel and distributed computing concepts.
 
 ### Installation
@@ -56,6 +56,13 @@ Before you begin, ensure you have met the following requirements:
     ```bash
     conda env create -f environment.yml
     ```
+
+### Using Conda
+We recommend using Miniconda, which is a lightweight version of Anaconda and is best for using on the cluster. 
+
+- Instructions on how to install Miniconda on your local machine can be found [here](https://docs.anaconda.com/miniconda/)
+- Activate an environment with `conda activate environment`
+- Install new packages with `conda install -c conda-forge packagename`
 
 ## Using Dask
 
